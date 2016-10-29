@@ -14,7 +14,7 @@
         manifest="${src}/main/assets/MANIFEST.MF" >
       <zipfileset dir="${build}/java">
         <include name="**/*.class" />
-        <exclude name="**/*TEST*" />
+        <exclude name="**/*Test*" />
       </zipfileset>
       <zipfileset dir="${src}/main/assets" prefix="META-INF/services">
         <include name="java.sql.Driver" />

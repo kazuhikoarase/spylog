@@ -1,15 +1,35 @@
 <project default="dist" basedir="../.." >
+
+  <property name="package-name" value="spylog" />
+
   <property name="src" location="src" />
   <property name="build" location="build" />
   <property name="dist" location="dist" />
+
   <target name="dist">
+
     <mkdir dir="${dist}" />
-    <jar destfile="${dist}/spylog.jar"
+
+    <jar destfile="${dist}/${package-name}.jar"
         manifest="${src}/main/assets/MANIFEST.MF" >
       <zipfileset dir="${build}/java">
         <include name="**/*.class" />
         <exclude name="**/*TEST*" />
       </zipfileset>
     </jar>
+
+    <zip destfile="${dist}/${package-name}.zip">
+      <zipfileset dir="${dist}">
+        <include name="${package-name}.jar"/>
+      </zipfileset>
+      <zipfileset dir="${src}/main/java">
+        <include name="${package-name}.js"/>
+      </zipfileset>
+      <zipfileset dir=".">
+        <include name="LICENSE"/>
+      </zipfileset>
+    </zip>
+
   </target>
+
 </project>

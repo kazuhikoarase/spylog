@@ -16,6 +16,9 @@
         <include name="**/*.class" />
         <exclude name="**/*TEST*" />
       </zipfileset>
+      <zipfileset dir="${src}/main/assets" prefix="META-INF/services">
+        <include name="java.sql.Driver" />
+      </zipfileset>
     </jar>
 
     <zip destfile="${dist}/${package-name}.zip">

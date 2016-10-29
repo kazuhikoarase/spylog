@@ -6,7 +6,19 @@
   <property name="build" location="build" />
   <property name="dist" location="dist" />
 
-  <target name="dist">
+  <target name="clean">
+    <delete dir="${build}" />
+    <delete dir="${dist}" />
+  </target>
+
+  <target name="compile">
+    <mkdir dir="${build}/java" />
+    <javac srcdir="${src}/main/java" destdir="${build}/java"
+      target="1.6" source="1.6" debug="true"
+      encoding="UTF-8" includeantruntime="false" />
+  </target>
+
+  <target name="dist" depends="compile">
 
     <mkdir dir="${dist}" />
 

@@ -1,0 +1,15 @@
+<project default="dist" basedir="../.." >
+  <property name="src" location="src" />
+  <property name="build" location="build" />
+  <property name="dist" location="dist" />
+  <target name="dist">
+    <mkdir dir="${dist}" />
+    <jar destfile="${dist}/spylog.jar"
+        manifest="${src}/main/assets/MANIFEST.MF" >
+      <zipfileset dir="${build}/java">
+        <include name="**/*.class" />
+        <exclude name="**/*TEST*" />
+      </zipfileset>
+    </jar>
+  </target>
+</project>

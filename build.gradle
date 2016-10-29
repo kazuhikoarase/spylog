@@ -1,0 +1,21 @@
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.6
+version = '1.0'
+
+jar {
+  manifest {
+    attributes 'Class-Path': '.'
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile group: 'junit', name: 'junit', version: '4.12'
+  compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.4'
+}

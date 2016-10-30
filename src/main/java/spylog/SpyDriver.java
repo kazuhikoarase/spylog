@@ -25,6 +25,8 @@ public class SpyDriver implements Driver {
 
   private static final String JDBC_PREFIX = "jdbc:spylog:";
 
+  private static final String JS_PATH = "/spylog.js";
+
   public interface Handler {
     void enter(String targetUrl, Object target,
         String methodName, Object[] args);
@@ -71,7 +73,7 @@ public class SpyDriver implements Driver {
   public static void loadHandler() {
     try {
       final Reader in = new InputStreamReader(
-          Invoker.class.getResource("/spylog.js").openStream(), "UTF-8");
+          Invoker.class.getResource(JS_PATH).openStream(), "UTF-8");
       try {
         handler = (Handler)new ScriptEngineManager().
             getEngineByName("javascript").eval(in);

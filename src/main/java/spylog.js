@@ -28,9 +28,9 @@
             sql.replace(/\s+/g, ' ') );
       }
     },
-    result : function() {},
-    throwable : function() {},
-    exit : function() {}
+    result : function(targetUrl, target, methodName, result) {},
+    throwable : function(targetUrl, target, methodName, t) {},
+    exit : function(targetUrl, target, methodName) {}
   };
 
   return new Packages.spylog.SpyDriver.Handler(handler);

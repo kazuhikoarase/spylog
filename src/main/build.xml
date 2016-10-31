@@ -28,6 +28,9 @@
         <include name="**/*.class" />
         <exclude name="**/*Test*" />
       </zipfileset>
+      <zipfileset dir="${src}/main/java" prefix="${package-name}" >
+        <include name="*.js" />
+      </zipfileset>
       <zipfileset dir="${src}/main/assets" prefix="META-INF/services">
         <include name="java.sql.Driver" />
       </zipfileset>

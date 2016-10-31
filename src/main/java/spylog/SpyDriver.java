@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -71,18 +72,26 @@ public class SpyDriver implements Driver {
    * reloadable.
    */
   public static void loadHandler() {
-    try {
-      final Reader in = new InputStreamReader(
-          Invoker.class.getResource(JS_PATH).openStream(), "UTF-8");
-      try {
-        handler = (Handler)new ScriptEngineManager().
-            getEngineByName("javascript").eval(in);
-      } finally {
-        in.close();
-      }
-    } catch(Exception e) {
-      e.printStackTrace();
+    URL url = SpyDriver.class.getResource(JS_PATH);
+    if (url == null) {
+      url = SpyDriver.class.getResource(JS_PATH.substring(1) );
+    }
+    if (url == null) {
       handler = defaultHandler;
+    } else {
+      try {
+        final Reader in = new InputStreamReader(
+            url.openStream(), "UTF-8");
+        try {
+          handler = (Handler)new ScriptEngineManager().
+              getEngineByName("javascript").eval(in);
+        } finally {
+          in.close();
+        }
+      } catch(Exception e) {
+        e.printStackTrace();
+        handler = defaultHandler;
+      }
     }
   }
 

@@ -26,7 +26,22 @@ if (typeof Java == 'undefined') {
       System.out.println('[spylog]' + msg);
     }
   };
-
+  var getSqlCommand = function(target, methodName, args) {
+    if (target instanceof Connection) {
+      if ( (methodName == 'prepareStatement' ||
+          methodName == 'prepareCall') &&
+            args && args.length > 0) {
+        return '' + args[0];
+      }
+    } else if (target instanceof Statement) {
+      if ( (methodName == 'execute' ||
+          methodName == 'executeQuery' || 
+          methodName == 'executeUpdate') &&
+            args && args.length > 0) {
+        return '' + args[0];
+      }
+    }
+  };
   var handler = {
     enter : function(targetUrl, target, methodName, args) {
       var sql = null;
@@ -45,13 +60,24 @@ if (typeof Java == 'undefined') {
         }
       }
       if (sql) {
-        console.log(targetUrl + ' - ' + methodName + ' - ' +
-            sql.replace(/\s+/g, ' ') );
+        var opts = {
+          msg : targetUrl + ' - ' + methodName + ' - ' +
+          sql.replace(/\s+/g, ' '),
+          startTime : System.currentTimeMillis()
+        };
+        console.log(' => ' + opts.msg);
+        return opts;
       }
+      return null;
     },
-    result : function(targetUrl, target, methodName, result) {},
-    throwable : function(targetUrl, target, methodName, t) {},
-    exit : function(targetUrl, target, methodName) {}
+    result : function(opts, result) {},
+    throwable : function(opts, t) {},
+    exit : function(opts) {
+      if (opts != null) {
+        console.log(' <= ' + opts.msg + ' ' +
+            (System.currentTimeMillis() - opts.startTime) + 'ms');
+      }
+    }
   };
 
   return new SpyDriver.Handler(handler);

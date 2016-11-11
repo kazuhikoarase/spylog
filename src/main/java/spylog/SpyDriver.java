@@ -29,31 +29,27 @@ public class SpyDriver implements Driver {
   private static final String JS_PATH = "/spylog.js";
 
   public interface Handler {
-    void enter(String targetUrl, Object target,
+    Object enter(String targetUrl, Object target,
         String methodName, Object[] args);
-    void result(String targetUrl, Object target,
-        String methodName, Object result);
-    void exit(String targetUrl, Object target, String methodName);
-    void throwable(String targetUrl, Object target,
-        String methodName, Throwable t);
+    void result(Object opts, Object result);
+    void exit(Object opts);
+    void throwable(Object opts, Throwable t);
   }
 
   private static final Handler defaultHandler = new Handler() {
     @Override
-    public void enter(String targetUrl, Object target,
+    public Object enter(String targetUrl, Object target,
         String methodName, Object[] args) {
+      return null;
     }
     @Override
-    public void result(String targetUrl, Object target,
-        String methodName, Object result) {
+    public void result(Object opts, Object result) {
     }
     @Override
-    public void throwable(String targetUrl, Object target,
-        String methodName, Throwable t) {
+    public void throwable(Object opts, Throwable t) {
     }
     @Override
-    public void exit(String targetUrl, Object target,
-        String methodName) {
+    public void exit(Object opts) {
     }
   };
 
@@ -235,10 +231,10 @@ public class SpyDriver implements Driver {
         final Object[] args
     ) throws Throwable {
       final String methodName = method.getName();
-      handler.enter(targetUrl, target, methodName, args);
+      final Object opts = handler.enter(targetUrl, target, methodName, args);
       try {
         final Object result = method.invoke(target, args);
-        handler.result(targetUrl, target, methodName, result);
+        handler.result(opts, result);
         if (result == null) {
           return result;
         } else if (!method.getReturnType().isInterface() ) {
@@ -253,13 +249,13 @@ public class SpyDriver implements Driver {
               targetUrl, result, method.getReturnType() );
         }
       } catch(InvocationTargetException e) {
-        handler.throwable(targetUrl, target, methodName, e.getCause() );
+        handler.throwable(opts, e.getCause() );
         throw e;
       } catch(Throwable t) {
-        handler.throwable(targetUrl, target, methodName, t);
+        handler.throwable(opts, t);
         throw t;
       } finally {
-        handler.exit(targetUrl, target, methodName);
+        handler.exit(opts);
       }
     }
   }

@@ -26,22 +26,7 @@ if (typeof Java == 'undefined') {
       System.out.println('[spylog]' + msg);
     }
   };
-  var getSqlCommand = function(target, methodName, args) {
-    if (target instanceof Connection) {
-      if ( (methodName == 'prepareStatement' ||
-          methodName == 'prepareCall') &&
-            args && args.length > 0) {
-        return '' + args[0];
-      }
-    } else if (target instanceof Statement) {
-      if ( (methodName == 'execute' ||
-          methodName == 'executeQuery' || 
-          methodName == 'executeUpdate') &&
-            args && args.length > 0) {
-        return '' + args[0];
-      }
-    }
-  };
+
   var handler = {
     enter : function(targetUrl, target, methodName, args) {
       var sql = null;
@@ -57,9 +42,12 @@ if (typeof Java == 'undefined') {
             methodName == 'executeUpdate') &&
               args && args.length > 0) {
           sql = '' + args[0];
+        } else if (methodName == 'execute' &&
+              !(args && args.length > 0) ) {
+          sql = '</>';
         }
       }
-      if (sql) {
+      if (sql != null) {
         var opts = {
           msg : targetUrl + ' - ' + methodName + ' - ' +
           sql.replace(/\s+/g, ' '),

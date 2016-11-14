@@ -37,14 +37,14 @@ if (typeof Java == 'undefined') {
           sql = '' + args[0];
         }
       } else if (target instanceof Statement) {
-        if ( (methodName == 'execute' ||
+        if (methodName == 'execute' ||
             methodName == 'executeQuery' || 
-            methodName == 'executeUpdate') &&
-              args && args.length > 0) {
-          sql = '' + args[0];
-        } else if (methodName == 'execute' &&
-              !(args && args.length > 0) ) {
-          sql = '</>';
+            methodName == 'executeUpdate') {
+          if (args && args.length > 0) {
+            sql = '' + args[0];
+          } else {
+            sql = '</>';
+          }
         }
       }
       if (sql != null) {

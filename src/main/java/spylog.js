@@ -3,14 +3,14 @@
 //
 if (typeof Java == 'undefined') {
   Java = {
-      type : function(className) {
-        var path = className.split(/\./g);
-        var cls = Packages;
-        for (var i = 0; i < path.length; i += 1) {
-          cls = cls[path[i]];
-        }
-        return cls;
+    type : function(className) {
+      var path = className.split(/\./g);
+      var cls = Packages;
+      for (var i = 0; i < path.length; i += 1) {
+        cls = cls[path[i]];
       }
+      return cls;
+    }
   };
 }
 
